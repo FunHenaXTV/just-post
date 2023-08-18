@@ -66,6 +66,11 @@ components_manager:
             path: /v1/echo
             method: GET
             task_processor: main-task-processor
+        
+        handler-user_data-update_info:
+            path: /v1/user_data/update_info
+            method: POST
+            task_processor: main-task-processor
 
         postgres-db-1:
             dbconnection: $dbconnection

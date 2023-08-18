@@ -4,6 +4,7 @@
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
+#include <userver/crypto/hash.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
@@ -18,7 +19,7 @@ class Echo final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-echo";
 
   Echo(const userver::components::ComponentConfig& config,
-        const userver::components::ComponentContext& component_context)
+       const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -28,8 +29,7 @@ class Echo final : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-
-    return request.RequestBody() + "\n";
+    return userver::crypto::hash::Sha512(request.RequestBody()) + "\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
