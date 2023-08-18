@@ -7,9 +7,9 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
+#include "create_user.hpp"
 #include "echo.hpp"
 #include "hello.hpp"
-#include "create_user.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =

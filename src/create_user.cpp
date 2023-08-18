@@ -4,12 +4,11 @@
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
+#include <userver/crypto/hash.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
-#include <userver/crypto/hash.hpp>
-
 
 namespace pg_service_template {
 
@@ -20,7 +19,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-create-user";
 
   CreateUser(const userver::components::ComponentConfig& config,
-        const userver::components::ComponentContext& component_context)
+             const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -30,24 +29,25 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    // const auto& name = request.GetArg("name");
+    const auto& name = request.GetArg("name");
+    const auto& email = request.GetArg("email");
+    const auto& password = request.GetArg("password");
+    if (!name.empty() && !email.empty() && !password.empty()) {
+      auto result = pg_cluster_->Execute(
+          userver::storages::postgres::ClusterHostType::kMaster,
+          "INSERT INTO hello_schema.user(name, email, password)"
+          "VALUES ($1, $2, $3) "
+          "ON CONFLICT (email) "
+          "DO NOTHING",
+          name, email, userver::crypto::hash::Sha512(password));
 
-    // auto user_type = UserType::kFirstTime;
-    // if (!name.empty()) {
-    //   auto result = pg_cluster_->Execute(
-    //       userver::storages::postgres::ClusterHostType::kMaster,
-    //       "INSERT INTO hello_schema.users(name, count) VALUES($1, 1) "
-    //       "ON CONFLICT (name) "
-    //       "DO UPDATE SET count = users.count + 1 "
-    //       "RETURNING users.count",
-    //       name);
+    } else {
+      throw userver::server::handlers::ClientError(
+          userver::server::handlers::ExternalBody{
+              "Too few arguments to create user"});
+    }
 
-    //   if (result.AsSingleRow<int>() > 1) {
-    //     user_type = UserType::kKnown;
-    //   }
-    // }
-
-    return userver::crypto::hash::Sha512(request.RequestBody());
+    return "1";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
