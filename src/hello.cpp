@@ -66,12 +66,11 @@ std::string SayHelloTo(std::string_view name, UserType type) {
   }
 
   UASSERT(false);
+  return "";
 }
 
 void AppendHello(userver::components::ComponentList& component_list) {
   component_list.Append<Hello>();
-  component_list.Append<userver::components::Postgres>("postgres-db-1");
-  component_list.Append<userver::clients::dns::Component>();
 }
 
 }  // namespace pg_service_template
