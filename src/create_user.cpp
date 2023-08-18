@@ -33,13 +33,17 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
     const auto& email = request.GetArg("email");
     const auto& password = request.GetArg("password");
     if (!name.empty() && !email.empty() && !password.empty()) {
-      auto result = pg_cluster_->Execute(
-          userver::storages::postgres::ClusterHostType::kMaster,
-          "INSERT INTO hello_schema.user(name, email, password)"
-          "VALUES ($1, $2, $3) "
-          "ON CONFLICT (email) "
-          "DO NOTHING",
-          name, email, userver::crypto::hash::Sha512(password));
+      try {
+        auto result = pg_cluster_->Execute(
+            userver::storages::postgres::ClusterHostType::kMaster,
+            "INSERT INTO hello_schema.user(name, email, password) "
+            "VALUES ($1, $2, $3)",
+            name, email, userver::crypto::hash::Sha512(password));
+      } catch (userver::storages::postgres::UniqueViolation&) {
+        throw userver::server::handlers::ClientError(
+            userver::server::handlers::ExternalBody{
+                "User with this email already exists"});
+      }
 
     } else {
       throw userver::server::handlers::ClientError(
