@@ -60,7 +60,10 @@ components_manager:
             path: /v1/echo
             method: POST
             task_processor: main-task-processor
-
+        handler-create-user:
+            path: /v1/user/create
+            method: POST
+            task_processor: main-task-processor
         handler-hello:
             path: /v1/hello
             method: POST

@@ -5,7 +5,7 @@
 #include <userver/components/component.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/utils/assert.hpp>
-
+#include <userver/crypto/hash.hpp>
 namespace pg_service_template {
 
 namespace {

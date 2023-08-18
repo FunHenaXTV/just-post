@@ -9,6 +9,7 @@
 
 #include "echo.hpp"
 #include "hello.hpp"
+#include "create_user.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =
@@ -22,6 +23,7 @@ int main(int argc, char* argv[]) {
 
   pg_service_template::AppendHello(component_list);
   pg_service_template::AppendEcho(component_list);
+  pg_service_template::AppendCreateUser(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
