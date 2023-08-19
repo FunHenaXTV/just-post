@@ -64,13 +64,11 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
         "WHERE email=$1",
         email);
 
-    if (result.Size() == 1) {
-      auto s = result.AsSingleRow<std::string>();
-      if (s != hash_passwd) {
-        throw userver::server::handlers::ClientError(
-            userver::server::handlers::ExternalBody{
-                "User with this email already exists\n"});
-      }
+    auto s = result.AsSingleRow<std::string>();
+    if (s != hash_passwd) {
+      throw userver::server::handlers::ClientError(
+          userver::server::handlers::ExternalBody{
+              "User with this email already exists\n"});
     }
 
     return "ok\n";
