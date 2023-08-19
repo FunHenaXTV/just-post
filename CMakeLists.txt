@@ -13,8 +13,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/hello.cpp
 	src/echo.hpp
 	src/echo.cpp
-	src/update-info.hpp
-	src/update-info.cpp
+	src/add-user_data.hpp
+	src/add-user_data.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 

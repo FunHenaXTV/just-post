@@ -67,8 +67,8 @@ components_manager:
             method: GET
             task_processor: main-task-processor
         
-        handler-user_data-update_info:
-            path: /v1/user_data/update_info
+        handler-user_data-add:
+            path: /v1/user_data/add
             method: POST
             task_processor: main-task-processor
 

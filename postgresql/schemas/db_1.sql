@@ -13,14 +13,14 @@ CREATE TABLE IF NOT EXISTS just_post_schema.users (
 
 CREATE TABLE IF NOT EXISTS just_post_schema.post (
     post_id serial PRIMARY KEY,
-    user_id int,
+    user_id int UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES just_post_schema.users(user_id),
     post_body text
 );
 
 CREATE TABLE IF NOT EXISTS just_post_schema.user_data (
     user_data_id serial PRIMARY KEY,
-    user_id int,
+    user_id int UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES just_post_schema.users(user_id),
     user_name text DEFAULT 'Unknown',
     surname text DEFAULT 'Unknown',
