@@ -33,7 +33,7 @@ components_manager:
                     overflow_behavior: discard  # Drop logs if the system is too busy to write them down.
 
         tracer:                              # Component that helps to trace execution times and requests in logs.
-            service-name: pg_service_template   # "You know. You all know exactly who I am. Say my name. " (c)
+            service-name: just_post   # "You know. You all know exactly who I am. Say my name. " (c)
 
         dynamic-config:                      # Dynamic config storage options, do nothing
             fs-cache-path: ''
@@ -56,16 +56,24 @@ components_manager:
             task_processor: main-task-processor
             throttling_enabled: false
             url_trailing_slash: strict-match
-        handler-echo:
-            path: /v1/echo
-            method: POST
-            task_processor: main-task-processor
+
         handler-create-user:
             path: /v1/user/create
             method: POST
             task_processor: main-task-processor
+
         handler-hello:
             path: /v1/hello
+            method: POST
+            task_processor: main-task-processor
+        
+        handler-echo:
+            path: /v1/echo
+            method: GET
+            task_processor: main-task-processor
+        
+        handler-user_data-add:
+            path: /v1/user_data/add
             method: POST
             task_processor: main-task-processor
 

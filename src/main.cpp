@@ -10,6 +10,7 @@
 #include "create_user.hpp"
 #include "echo.hpp"
 #include "hello.hpp"
+#include "add-user_data.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =
@@ -21,9 +22,10 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::clients::dns::Component>();
 
-  pg_service_template::AppendHello(component_list);
-  pg_service_template::AppendEcho(component_list);
   pg_service_template::AppendCreateUser(component_list);
+  just_post::AppendHello(component_list);
+  just_post::AppendEcho(component_list);
+  just_post::AppendAddUserData(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

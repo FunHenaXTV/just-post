@@ -7,6 +7,6 @@
 
 namespace just_post {
 
-void AppendEcho(userver::components::ComponentList& component_list);
+void AppendAddUserData(userver::components::ComponentList& component_list);
 
 }  // namespace just_post

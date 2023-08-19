@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(pg_service_template CXX)
+project(just_post CXX)
 
 include(third_party/userver/cmake/SetupEnvironment.cmake)
 include(GNUInstallDirs)
@@ -15,6 +15,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/echo.cpp
     src/create_user.hpp
     src/create_user.cpp
+    src/add-user_data.hpp
+    src/add-user_data.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
