@@ -21,9 +21,9 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::clients::dns::Component>();
 
-  pg_service_template::AppendHello(component_list);
-  pg_service_template::AppendEcho(component_list);
-  pg_service_template::AppendUpdateInfo(component_list);
+  just_post::AppendHello(component_list);
+  just_post::AppendEcho(component_list);
+  just_post::AppendUpdateInfo(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

@@ -10,7 +10,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 
-namespace pg_service_template {
+namespace just_post {
 
 namespace {
 
@@ -41,4 +41,4 @@ void AppendEcho(userver::components::ComponentList& component_list) {
   component_list.Append<Echo>();
 }
 
-}  // namespace pg_service_template
+}  // namespace just_post
