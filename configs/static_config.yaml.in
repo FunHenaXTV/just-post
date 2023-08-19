@@ -57,11 +57,6 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-create-user:
-            path: /v1/user/create
-            method: POST
-            task_processor: main-task-processor
-
         handler-hello:
             path: /v1/hello
             method: POST
@@ -69,6 +64,16 @@ components_manager:
         
         handler-echo:
             path: /v1/echo
+            method: GET
+            task_processor: main-task-processor
+        
+        handler-create-user:
+            path: /v1/user/create
+            method: POST
+            task_processor: main-task-processor
+        
+        handler-get-id:
+            path: /v1/user/get_id
             method: GET
             task_processor: main-task-processor
         

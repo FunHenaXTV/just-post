@@ -12,7 +12,7 @@
 #include <userver/utils/assert.hpp>
 
 namespace just_post {
-  static constexpr int MIN_SIZE_OF_PSWD = 8;
+static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
 
@@ -35,8 +35,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
     const auto& passwd = request.GetArg("passwd");
     if (!IsValidEmail(email)) {
       throw userver::server::handlers::ClientError(
-          userver::server::handlers::ExternalBody{
-              "Email is invalid\n"});
+          userver::server::handlers::ExternalBody{"Email is invalid\n"});
     }
 
     if (!IsValidPasswd(passwd)) {
@@ -53,7 +52,8 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
         "ON CONFLICT DO NOTHING",
         email, hash_passwd);
     if (result.RowsAffected()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
+      request.SetResponseStatus(
+          userver::server::http::HttpStatus::kCreated);  // 201
       return "ok\n";
     }
 
@@ -85,7 +85,7 @@ void AppendCreateUser(userver::components::ComponentList& component_list) {
   component_list.Append<CreateUser>();
 }
 
-bool IsValidEmail(const std::string &s) {
+bool IsValidEmail(const std::string& s) {
   if (s.empty()) {
     return false;
   }
@@ -94,7 +94,7 @@ bool IsValidEmail(const std::string &s) {
   return std::regex_match(s, pattern);
 }
 
-bool IsValidPasswd(const std::string &s) {
+bool IsValidPasswd(const std::string& s) {
   return s.size() >= MIN_SIZE_OF_PSWD;
 }
 
