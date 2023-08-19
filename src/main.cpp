@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::clients::dns::Component>();
 
-  pg_service_template::AppendCreateUser(component_list);
+  just_post::AppendCreateUser(component_list);
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);
   just_post::AppendAddUserData(component_list);

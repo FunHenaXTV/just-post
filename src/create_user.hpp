@@ -6,8 +6,8 @@
 
 #include <userver/components/component_list.hpp>
 
-namespace pg_service_template {
+namespace just_post {
 
 void AppendCreateUser(userver::components::ComponentList& component_list);
 
-}  // namespace pg_service_template
+}  // namespace just_post

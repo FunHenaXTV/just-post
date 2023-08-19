@@ -10,7 +10,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 
-namespace pg_service_template {
+namespace just_post {
 
 namespace {
 
@@ -46,7 +46,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
         email, hash_passwd);
     if (result.RowsAffected()) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kCreated);
-      return "ok";
+      return "ok\n";
     }
 
     result = pg_cluster_->Execute(
@@ -65,7 +65,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
       }
     }
 
-    return "ok";
+    return "ok\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
@@ -77,4 +77,4 @@ void AppendCreateUser(userver::components::ComponentList& component_list) {
   component_list.Append<CreateUser>();
 }
 
-}  // namespace pg_service_template
+}  // namespace just_post

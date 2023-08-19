@@ -62,7 +62,7 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
           "DO NOTHING",
           user_id_int, user_name, surname, age_int, gender, city, date_of_birth, user_status);
 
-    return "1";
+    return "ok\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
