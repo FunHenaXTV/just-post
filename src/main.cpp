@@ -7,6 +7,7 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
+#include "create_user.hpp"
 #include "echo.hpp"
 #include "hello.hpp"
 #include "add-user_data.hpp"
@@ -21,6 +22,7 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::clients::dns::Component>();
 
+  pg_service_template::AppendCreateUser(component_list);
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);
   just_post::AppendAddUserData(component_list);
