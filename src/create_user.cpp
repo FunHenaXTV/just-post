@@ -29,29 +29,43 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    const auto& name = request.GetArg("name");
     const auto& email = request.GetArg("email");
-    const auto& password = request.GetArg("password");
-    if (!name.empty() && !email.empty() && !password.empty()) {
-      try {
-        auto result = pg_cluster_->Execute(
-            userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO hello_schema.user(name, email, password) "
-            "VALUES ($1, $2, $3)",
-            name, email, userver::crypto::hash::Sha512(password));
-      } catch (userver::storages::postgres::UniqueViolation&) {
-        throw userver::server::handlers::ClientError(
-            userver::server::handlers::ExternalBody{
-                "User with this email already exists"});
-      }
-
-    } else {
+    const auto& passwd = request.GetArg("passwd");
+    if (email.empty() || passwd.empty()) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
               "Too few arguments to create user"});
     }
 
-    return "1";
+    auto hash_passwd = userver::crypto::hash::Sha512(passwd);
+    auto result = pg_cluster_->Execute(
+        userver::storages::postgres::ClusterHostType::kMaster,
+        "INSERT INTO just_post_schema.users(email, passwd) "
+        "VALUES ($1, $2) "
+        "ON CONFLICT DO NOTHING",
+        email, hash_passwd);
+    if (result.RowsAffected()) {
+      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated);
+      return "ok";
+    }
+
+    result = pg_cluster_->Execute(
+        userver::storages::postgres::ClusterHostType::kMaster,
+        "SELECT passwd "
+        "FROM just_post_schema.users "
+        "WHERE email=$1",
+        email);
+
+    if (result.Size() == 1) {
+      auto s = result.AsSingleRow<std::string>();
+      if (s != hash_passwd) {
+        throw userver::server::handlers::ClientError(
+            userver::server::handlers::ExternalBody{
+                "User with this email already exists"});
+      }
+    }
+
+    return "ok";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
