@@ -40,17 +40,19 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
     const auto& date_of_birth_str = request.GetArg("date_of_birth");
     const auto& user_status = request.GetArg("user_status");
 
+    // + 10 ифов
+
     if (user_id.empty() || user_name.empty() || surname.empty() ||
         gender.empty() || city.empty() || date_of_birth_str.empty() ||
         user_status.empty() || age.empty()) {
       throw userver::server::handlers::ClientError(userver::server::handlers::ExternalBody{
-          fmt::format("Incorrect parametrs\n")});
+          "Incorrect parametrs\n"});
     }
 
     int user_id_int = strtol(user_id.c_str(), NULL, 10);
     int age_int = strtol(age.c_str(), NULL, 10);
     int day = 0, month = 0, year = 0;
-    sscanf(date_of_birth_str.c_str(), "%d-%d-%d", &day, &month, &year);
+    sscanf(date_of_birth_str.c_str(), "%d-%d-%d", &year, &month, &day);
     userver::storages::postgres::Date date_of_birth(year, month, day);
 
     auto result = pg_cluster_->Execute(
@@ -63,9 +65,10 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
           user_id_int, user_name, surname, age_int, gender, city, date_of_birth, user_status);
 
     if (result.RowsAffected()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated);
-      return "ok\n";
+      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
     }
+
+    // TODO: Conflict check
 
     return "ok\n";
   }

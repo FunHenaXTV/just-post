@@ -34,7 +34,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
     if (email.empty() || passwd.empty()) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
-              "Too few arguments to create user"});
+              "Incorrect Parametrs\n"});
     }
 
     auto hash_passwd = userver::crypto::hash::Sha512(passwd);
@@ -45,7 +45,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
         "ON CONFLICT DO NOTHING",
         email, hash_passwd);
     if (result.RowsAffected()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated);
+      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
       return "ok\n";
     }
 
@@ -61,7 +61,7 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
       if (s != hash_passwd) {
         throw userver::server::handlers::ClientError(
             userver::server::handlers::ExternalBody{
-                "User with this email already exists"});
+                "User with this email already exists\n"});
       }
     }
 

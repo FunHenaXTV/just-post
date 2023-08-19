@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS just_post_schema.users (
     passwd text NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS just_post_schema.post (
+CREATE TABLE IF NOT EXISTS just_post_schema.posts (
     post_id serial PRIMARY KEY,
     user_id int UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES just_post_schema.users(user_id),
