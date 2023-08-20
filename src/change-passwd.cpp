@@ -67,8 +67,7 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
         userver::storages::postgres::ClusterHostType::kMaster,
         "UPDATE just_post_schema.users "
         "SET passwd=$2 "
-        "WHERE email=$1 "
-        "ON CONFLICT DO NOTHING",
+        "WHERE email=$1 ",
         email, hash_new_passwd);
 
     if (result.RowsAffected()) {
