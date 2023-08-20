@@ -1,4 +1,4 @@
-#include "change_passwd.hpp"
+#include "change-passwd.hpp"
 
 #include <fmt/format.h>
 
@@ -15,14 +15,12 @@ static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
 
-bool IsValidPasswd(const std::string& s);
-
 class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
  public:
   static constexpr std::string_view kName = "handler-change-passwd";
 
   ChangePasswd(const userver::components::ComponentConfig& config,
-               const userver::components::ComponentContext& component_context)
+             const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -32,24 +30,25 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    const auto& email = request.GetArg("email");
+    const auto& user_id = request.GetArg("user_id");
     const auto& old_passwd = request.GetArg("old_passwd");
     const auto& new_passwd = request.GetArg("new_passwd");
 
-    if (email.empty() || old_passwd.empty() || new_passwd.empty()) {
+    if (user_id.empty() || old_passwd.empty() || new_passwd.empty()) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
               "Too few arguments to change password\n"});
     }
 
     auto hash_old_passwd = userver::crypto::hash::Sha512(old_passwd);
+    int user_id_int = strtol(user_id.c_str(), NULL, 10);
 
     auto bd_answer = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         "SELECT passwd "
         "FROM just_post_schema.users "
-        "WHERE email=$1",
-        email);
+        "WHERE user_id=$1",
+        user_id_int);
 
     if (bd_answer.Size() == 1) {
       auto bd_passwd = bd_answer.AsSingleRow<std::string>();
@@ -57,20 +56,20 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
       if (bd_passwd != hash_old_passwd) {
         throw userver::server::handlers::ClientError(
             userver::server::handlers::ExternalBody{
-                "Wrong password for this email\n"});
+                "Wrong password for this user\n"});
       }
     } else {
-      throw userver::server::handlers::ClientError(
-          userver::server::handlers::ExternalBody{
-              "This email havent registered yet\n"});
+        throw userver::server::handlers::ClientError(
+            userver::server::handlers::ExternalBody{
+                "This user havent registered yet\n"});
     }
 
     auto hash_new_passwd = userver::crypto::hash::Sha512(new_passwd);
 
     if (hash_new_passwd == hash_old_passwd) {
-      throw userver::server::handlers::ClientError(
-          userver::server::handlers::ExternalBody{
-              "New password matched with old password\n"});
+        throw userver::server::handlers::ClientError(
+            userver::server::handlers::ExternalBody{
+                "New password matched with old password\n"});
     }
 
     if (!IsValidPasswd(new_passwd)) {
@@ -83,28 +82,28 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
         userver::storages::postgres::ClusterHostType::kMaster,
         "UPDATE just_post_schema.users "
         "SET passwd=$2 "
-        "WHERE email=$1 ",
-        email, hash_new_passwd);
+        "WHERE user_id=$1 ",
+        user_id_int, hash_new_passwd);
 
     if (result.RowsAffected()) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kCreated);
       return "ok\n";
     }
 
-    return "ok\n";
+    return "Server Error\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
-bool IsValidPasswd(const std::string& s) {
-  return s.size() >= MIN_SIZE_OF_PSWD;
-}
-
 }  // namespace
 
 void AppendChangePasswd(userver::components::ComponentList& component_list) {
   component_list.Append<ChangePasswd>();
+}
+
+bool IsValidPasswd(const std::string& s) {
+  return s.size() >= MIN_SIZE_OF_PSWD;
 }
 
 }  // namespace just_post
