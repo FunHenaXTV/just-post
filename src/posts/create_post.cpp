@@ -1,6 +1,8 @@
 #include "create_post.hpp"
 
 #include <fmt/format.h>
+#include <ctime>
+#include <iostream>
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
@@ -8,6 +10,7 @@
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include <userver/storages/postgres/io/date.hpp>
 #include <userver/utils/assert.hpp>
 
 namespace just_post {
@@ -52,19 +55,28 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
               "User with this ID doesn't exist\n"});
     }
 
+    std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+
+    int day = now->tm_mday;
+    int month = now->tm_mon + shift_for_month;
+    int year = now->tm_year + shift_for_year;
+
+    userver::storages::postgres::Date date_of_post(year, month, day);
+
     result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        "INSERT INTO just_post_schema.posts(user_id, post_body) "
-        "VALUES ($1, $2) "
+        "INSERT INTO just_post_schema.posts(user_id, post_body, date_of_post) "
+        "VALUES ($1, $2, $3) "
         "ON CONFLICT DO NOTHING",
-        user_id_int, msg);
+        user_id_int, msg, date_of_post);
     if (result.RowsAffected()) {
       request.SetResponseStatus(
           userver::server::http::HttpStatus::kCreated);  // 201
       return "ok\n";
     }
 
-    return "error\n";  // исправить уникальность
+    return "error\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
