@@ -17,6 +17,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/create_user.cpp
     src/add-user_data.hpp
     src/add-user_data.cpp
+    src/change-passwd.cpp
+    src/change-passwd.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
