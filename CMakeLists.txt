@@ -9,15 +9,26 @@ add_subdirectory(third_party/userver)
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/hello.hpp
-    src/hello.cpp
-    src/echo.hpp
-    src/echo.cpp
-    src/create_user.hpp
-    src/create_user.cpp
-    src/add-user_data.hpp
-    src/add-user_data.cpp
+    src/hello/hello.hpp
+    src/hello/hello.cpp
+    src/echo/echo.hpp
+    src/echo/echo.cpp
+
+    src/users/create_user.hpp
+    src/users/create_user.cpp
+    src/users/get_id.hpp
+    src/users/get_id.cpp
+    src/users/change_passwd.cpp
+    src/users/change_passwd.hpp
+
+    src/user_data/add_user_data.hpp
+    src/user_data/add_user_data.cpp
+    
+    src/posts/create_post.hpp
+    src/posts/create_post.cpp
 )
+
+
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
@@ -28,7 +39,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
-    src/hello_test.cpp
+    src/hello/hello_test.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
 add_google_tests(${PROJECT_NAME}_unittest)
@@ -36,7 +47,7 @@ add_google_tests(${PROJECT_NAME}_unittest)
 
 # Benchmarks
 add_executable(${PROJECT_NAME}_benchmark
-	src/hello_benchmark.cpp
+	src/hello/hello_benchmark.cpp
 )
 target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver-ubench)
 add_google_benchmark_tests(${PROJECT_NAME}_benchmark)

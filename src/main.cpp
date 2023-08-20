@@ -7,10 +7,16 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
-#include "create_user.hpp"
-#include "echo.hpp"
-#include "hello.hpp"
-#include "add-user_data.hpp"
+#include "echo/echo.hpp"
+#include "hello/hello.hpp"
+
+#include "users/change_passwd.hpp"
+#include "users/create_user.hpp"
+#include "users/get_id.hpp"
+
+#include "posts/create_post.hpp"
+
+#include "user_data/add_user_data.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =
@@ -23,9 +29,12 @@ int main(int argc, char* argv[]) {
           .Append<userver::clients::dns::Component>();
 
   just_post::AppendCreateUser(component_list);
+  just_post::AppendGetId(component_list);
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);
   just_post::AppendAddUserData(component_list);
+  just_post::AppendChangePasswd(component_list);
+  just_post::AppendCreatePost(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

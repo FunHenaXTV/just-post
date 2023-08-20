@@ -1,16 +1,16 @@
-#include "hello.hpp"
+#include "add_user_data.hpp"
 
 #include <fmt/format.h>
 #include <iostream>
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
+#include <userver/server/handlers/exceptions.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <userver/utils/assert.hpp>
-#include <userver/server/handlers/exceptions.hpp>
 #include <userver/storages/postgres/io/date.hpp>
+#include <userver/utils/assert.hpp>
 
 namespace just_post {
 
@@ -21,7 +21,7 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-user_data-add";
 
   AddUserData(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& component_context)
+              const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -45,8 +45,8 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
     if (user_id.empty() || user_name.empty() || surname.empty() ||
         gender.empty() || city.empty() || date_of_birth_str.empty() ||
         user_status.empty() || age.empty()) {
-      throw userver::server::handlers::ClientError(userver::server::handlers::ExternalBody{
-          "Incorrect parametrs\n"});
+      throw userver::server::handlers::ClientError(
+          userver::server::handlers::ExternalBody{"Incorrect parametrs\n"});
     }
 
     int user_id_int = strtol(user_id.c_str(), NULL, 10);
@@ -56,16 +56,19 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
     userver::storages::postgres::Date date_of_birth(year, month, day);
 
     auto result = pg_cluster_->Execute(
-          userver::storages::postgres::ClusterHostType::kMaster,
-          "INSERT INTO just_post_schema.user_data(user_id, user_name, surname, age, gender, "
-          "city, date_of_birth, user_status) "
-          "VALUES($1, $2, $3, $4, $5, $6, $7, $8) "
-          "ON CONFLICT (user_id) "
-          "DO NOTHING",
-          user_id_int, user_name, surname, age_int, gender, city, date_of_birth, user_status);
+        userver::storages::postgres::ClusterHostType::kMaster,
+        "INSERT INTO just_post_schema.user_data(user_id, user_name, surname, "
+        "age, gender, "
+        "city, date_of_birth, user_status) "
+        "VALUES($1, $2, $3, $4, $5, $6, $7, $8) "
+        "ON CONFLICT (user_id) "
+        "DO NOTHING",
+        user_id_int, user_name, surname, age_int, gender, city, date_of_birth,
+        user_status);
 
     if (result.RowsAffected()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
+      request.SetResponseStatus(
+          userver::server::http::HttpStatus::kCreated);  // 201
     }
 
     // TODO: Conflict check
