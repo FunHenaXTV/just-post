@@ -50,12 +50,23 @@ components_manager:
             path: /tests/{action}
             method: POST
             task_processor: main-task-processor
+
         handler-ping:
             path: /ping
             method: GET
             task_processor: main-task-processor
             throttling_enabled: false
             url_trailing_slash: strict-match
+
+        handler-create-user:
+            path: /v1/user/create
+            method: POST
+            task_processor: main-task-processor
+
+        handler-create-post:
+            path: /v1/post/create
+            method: POST
+            task_processor: main-task-processor
 
         handler-hello:
             path: /v1/hello

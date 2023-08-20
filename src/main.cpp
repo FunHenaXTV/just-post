@@ -12,6 +12,8 @@
 #include "echo.hpp"
 #include "get_id.hpp"
 #include "hello.hpp"
+#include "add-user_data.hpp"
+#include "create_post.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =
@@ -28,6 +30,7 @@ int main(int argc, char* argv[]) {
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);
   just_post::AppendAddUserData(component_list);
+  just_post::AppendCreatePost(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
