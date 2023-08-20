@@ -1,4 +1,4 @@
-#include "change-passwd.hpp"
+#include "change_passwd.hpp"
 
 #include <fmt/format.h>
 
@@ -14,6 +14,8 @@ namespace just_post {
 static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
+
+bool IsValidPasswd(const std::string& s);
 
 class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
  public:
@@ -96,14 +98,14 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
   userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
+bool IsValidPasswd(const std::string& s) {
+  return s.size() >= MIN_SIZE_OF_PSWD;
+}
+
 }  // namespace
 
 void AppendChangePasswd(userver::components::ComponentList& component_list) {
   component_list.Append<ChangePasswd>();
-}
-
-bool IsValidPasswd(const std::string& s) {
-  return s.size() >= MIN_SIZE_OF_PSWD;
 }
 
 }  // namespace just_post
