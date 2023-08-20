@@ -2,7 +2,6 @@
 
 #include <fmt/format.h>
 
-
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/crypto/hash.hpp>
@@ -30,7 +29,6 @@ class Echo final : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-
     return userver::crypto::hash::Sha512(request.RequestBody()) + "\n";
   }
 

@@ -15,10 +15,14 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/echo.cpp
     src/create_user.hpp
     src/create_user.cpp
+    src/get_id.hpp
+    src/get_id.cpp
     src/add-user_data.hpp
     src/add-user_data.cpp
     src/change-passwd.cpp
     src/change-passwd.hpp
+    src/create_post.hpp
+    src/create_post.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
