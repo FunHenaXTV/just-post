@@ -92,6 +92,11 @@ components_manager:
             path: /v1/user_data/add
             method: POST
             task_processor: main-task-processor
+        
+        handler-change-passwd:
+            path: /v1/user/change_passwd
+            method: POST
+            task_processor: main-task-processor
 
         postgres-db-1:
             dbconnection: $dbconnection

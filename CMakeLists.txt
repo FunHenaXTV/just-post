@@ -19,6 +19,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/get_id.cpp
     src/add-user_data.hpp
     src/add-user_data.cpp
+    src/change-passwd.cpp
+    src/change-passwd.hpp
     src/create_post.hpp
     src/create_post.cpp
 )
