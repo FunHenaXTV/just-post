@@ -56,7 +56,7 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
         userver::storages::postgres::ClusterHostType::kMaster,
         "INSERT INTO just_post_schema.posts(user_id, post_body) "
         "VALUES ($1, $2) "
-        "ON CONFLICT (user_id) DO NOTHING",
+        "ON CONFLICT DO NOTHING",
         user_id_int, msg);
     if (result.RowsAffected()) {
       request.SetResponseStatus(

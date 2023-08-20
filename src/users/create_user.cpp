@@ -16,6 +16,9 @@ static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
 
+bool IsValidEmail(const std::string& s);
+bool IsValidPasswd(const std::string& s);
+
 class CreateUser final : public userver::server::handlers::HttpHandlerBase {
  public:
   static constexpr std::string_view kName = "handler-create-user";
@@ -77,12 +80,6 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
   userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
-}  // namespace
-
-void AppendCreateUser(userver::components::ComponentList& component_list) {
-  component_list.Append<CreateUser>();
-}
-
 bool IsValidEmail(const std::string& s) {
   if (s.empty()) {
     return false;
@@ -94,6 +91,12 @@ bool IsValidEmail(const std::string& s) {
 
 bool IsValidPasswd(const std::string& s) {
   return s.size() >= MIN_SIZE_OF_PSWD;
+}
+
+}  // namespace
+
+void AppendCreateUser(userver::components::ComponentList& component_list) {
+  component_list.Append<CreateUser>();
 }
 
 }  // namespace just_post

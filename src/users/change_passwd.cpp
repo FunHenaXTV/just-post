@@ -1,4 +1,4 @@
-#include "change-passwd.hpp"
+#include "change_passwd.hpp"
 
 #include <fmt/format.h>
 
@@ -15,12 +15,14 @@ static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
 
+bool IsValidPasswd(const std::string& s);
+
 class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
  public:
   static constexpr std::string_view kName = "handler-change-passwd";
 
   ChangePasswd(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& component_context)
+               const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -58,17 +60,17 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
                 "Wrong password for this email\n"});
       }
     } else {
-        throw userver::server::handlers::ClientError(
-            userver::server::handlers::ExternalBody{
-                "This email havent registered yet\n"});
+      throw userver::server::handlers::ClientError(
+          userver::server::handlers::ExternalBody{
+              "This email havent registered yet\n"});
     }
 
     auto hash_new_passwd = userver::crypto::hash::Sha512(new_passwd);
 
     if (hash_new_passwd == hash_old_passwd) {
-        throw userver::server::handlers::ClientError(
-            userver::server::handlers::ExternalBody{
-                "New password matched with old password\n"});
+      throw userver::server::handlers::ClientError(
+          userver::server::handlers::ExternalBody{
+              "New password matched with old password\n"});
     }
 
     if (!IsValidPasswd(new_passwd)) {
@@ -95,14 +97,14 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
   userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 
+bool IsValidPasswd(const std::string& s) {
+  return s.size() >= MIN_SIZE_OF_PSWD;
+}
+
 }  // namespace
 
 void AppendChangePasswd(userver::components::ComponentList& component_list) {
   component_list.Append<ChangePasswd>();
-}
-
-bool IsValidPasswd(const std::string& s) {
-  return s.size() >= MIN_SIZE_OF_PSWD;
 }
 
 }  // namespace just_post
