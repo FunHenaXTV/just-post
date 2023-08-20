@@ -62,6 +62,11 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-create-post:
+            path: /v1/post/create
+            method: POST
+            task_processor: main-task-processor
+
         handler-hello:
             path: /v1/hello
             method: POST
