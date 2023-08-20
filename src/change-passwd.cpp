@@ -1,4 +1,4 @@
-#include "create_user.hpp"
+#include "change-passwd.hpp"
 
 #include <fmt/format.h>
 
@@ -11,6 +11,7 @@
 #include <userver/utils/assert.hpp>
 
 namespace just_post {
+static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
 
@@ -36,7 +37,7 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
     if (email.empty() || old_passwd.empty() || new_passwd.empty()) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
-              "Too few arguments to change password"});
+              "Too few arguments to change password\n"});
     }
 
     auto hash_old_passwd = userver::crypto::hash::Sha512(old_passwd);
@@ -54,15 +55,28 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
       if (bd_passwd != hash_old_passwd) {
         throw userver::server::handlers::ClientError(
             userver::server::handlers::ExternalBody{
-                "Wrong password for this email"});
+                "Wrong password for this email\n"});
       }
     } else {
         throw userver::server::handlers::ClientError(
             userver::server::handlers::ExternalBody{
-                "This email havent registered yet"});
+                "This email havent registered yet\n"});
     }
 
     auto hash_new_passwd = userver::crypto::hash::Sha512(new_passwd);
+
+    if (hash_new_passwd == hash_old_passwd) {
+        throw userver::server::handlers::ClientError(
+            userver::server::handlers::ExternalBody{
+                "New password matched with old password\n"});
+    }
+
+    if (!IsValidPasswd(new_passwd)) {
+      throw userver::server::handlers::ClientError(
+          userver::server::handlers::ExternalBody{
+              "Password must contain at least 8 symbols\n"});
+    }
+
     auto result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         "UPDATE just_post_schema.users "
@@ -75,6 +89,7 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
       return "ok\n";
     }
 
+    return "ok\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
@@ -84,6 +99,10 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
 
 void AppendChangePasswd(userver::components::ComponentList& component_list) {
   component_list.Append<ChangePasswd>();
+}
+
+bool IsValidPasswd(const std::string& s) {
+  return s.size() >= MIN_SIZE_OF_PSWD;
 }
 
 }  // namespace just_post
