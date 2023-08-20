@@ -50,6 +50,7 @@ components_manager:
             path: /tests/{action}
             method: POST
             task_processor: main-task-processor
+
         handler-ping:
             path: /ping
             method: GET
@@ -74,6 +75,16 @@ components_manager:
         
         handler-echo:
             path: /v1/echo
+            method: GET
+            task_processor: main-task-processor
+        
+        handler-create-user:
+            path: /v1/user/create
+            method: POST
+            task_processor: main-task-processor
+        
+        handler-get-id:
+            path: /v1/user/get_id
             method: GET
             task_processor: main-task-processor
         
