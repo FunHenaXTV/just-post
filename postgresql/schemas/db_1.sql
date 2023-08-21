@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS just_post_schema.posts (
     user_id int NOT NULL,
     FOREIGN KEY (user_id) REFERENCES just_post_schema.users(user_id),
     post_body text,
-    date_of_post date
+    date_of_post timestamp
 );
 
 CREATE TABLE IF NOT EXISTS just_post_schema.user_data (
