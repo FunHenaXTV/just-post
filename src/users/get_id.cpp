@@ -29,7 +29,7 @@ class GetId final : public userver::server::handlers::HttpHandlerBase {
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     const auto& email = request.GetArg("email");
-    if (IsValidEmail(email)) {
+    if (tools::IsValidEmail(email)) {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
           "SELECT user_id "
