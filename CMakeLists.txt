@@ -23,6 +23,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
     src/user_data/add_user_data.hpp
     src/user_data/add_user_data.cpp
+    src/user_data/update_user_data.hpp
+    src/user_data/update_user_data.cpp
     
     src/posts/create_post.hpp
     src/posts/create_post.cpp
