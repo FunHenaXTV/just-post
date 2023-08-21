@@ -8,6 +8,7 @@
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include <userver/storages/postgres/io/date.hpp>
 #include <userver/utils/assert.hpp>
 
 namespace just_post {
@@ -54,8 +55,8 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
 
     result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        "INSERT INTO just_post_schema.posts(user_id, post_body) "
-        "VALUES ($1, $2) "
+        "INSERT INTO just_post_schema.posts(user_id, post_body, date_of_post) "
+        "VALUES ($1, $2, CURRENT_TIMESTAMP) "
         "ON CONFLICT DO NOTHING",
         user_id_int, msg);
     if (result.RowsAffected()) {
@@ -64,7 +65,7 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
       return "ok\n";
     }
 
-    return "error\n";  // исправить уникальность
+    return "error\n";
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;

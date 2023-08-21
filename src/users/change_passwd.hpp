@@ -4,6 +4,7 @@
 #include <string_view>
 
 #include <userver/components/component_list.hpp>
+#include "../tools/verify_parameter.hpp"
 
 namespace just_post {
 
