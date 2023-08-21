@@ -26,6 +26,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     
     src/posts/create_post.hpp
     src/posts/create_post.cpp
+    src/posts/get_last_n_post_id.cpp
+    src/posts/get_last_n_post_id.hpp
 
     src/tools/verify_parameter.cpp
     src/tools/verify_parameter.hpp
