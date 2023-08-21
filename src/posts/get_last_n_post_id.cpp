@@ -30,44 +30,45 @@ class GetLastNPostId final : public userver::server::handlers::HttpHandlerBase {
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     const auto& cnt = request.GetArg("cnt");
-    int n = strtol(cnt.c_str(), NULL, 10);
 
-    //make vector of posts id from postgresql
+    if (cnt.size()) {
+      int n = strtol(cnt.c_str(), NULL, 10);
 
-    //if (cnt.size()) {
-      //auto result = pg_cluster_->Execute(
-          //userver::storages::postgres::ClusterHostType::kMaster,
-        //  "SELECT post_id "
-          //"FROM just_post_schema.posts "
-        //  "ORDER BY date_of_post DESC "
-      //    "LIMIT $1",
-     //     n);
+      if (n <= 0) {
+        throw userver::server::handlers::ClientError(
+        userver::server::handlers::ExternalBody{
+            "Incorrect params\n"});
+      }
 
-   //   if (result.Size()) {
-  //      auto posts_id = result.AsContainer<std::vector<int>>();
-        //std::cout << *(posts_id.begin()) << *(posts_id.end() - 1) << std::endl;
-    //  }
-   // }
-
-   //trying return json string
-   
-       if (cnt.size()) {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
-          "SELECT JSON_AGG(post_id) "
+          "SELECT post_id "
           "FROM just_post_schema.posts "
           "ORDER BY date_of_post DESC "
           "LIMIT $1",
           n);
 
       if (result.Size()) {
-        return result.AsSingleRow<std::string>();
+        auto posts_id = result.AsContainer<std::vector<int>>();
+        std::string json_posts_id = "[";
+
+        for (auto i = posts_id.begin(); i < posts_id.end(); i++) {
+            if (i != posts_id.begin()) {
+                json_posts_id += " ,";
+            }
+
+            json_posts_id += std::to_string(*i);
+        }
+
+        json_posts_id += "]";
+
+        return json_posts_id;
       }
     }
 
     throw userver::server::handlers::ClientError(
         userver::server::handlers::ExternalBody{
-            "Too few params\n"});
+            "Incorrect params\n"});
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
