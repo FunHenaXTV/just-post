@@ -46,7 +46,7 @@ class AddUserData final : public userver::server::handlers::HttpHandlerBase {
         gender.empty() || city.empty() || date_of_birth_str.empty() ||
         user_status.empty() || age.empty()) {
       throw userver::server::handlers::ClientError(
-          userver::server::handlers::ExternalBody{"Incorrect parametrs\n"});
+          userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
 
     int user_id_int = strtol(user_id.c_str(), NULL, 10);

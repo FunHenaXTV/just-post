@@ -2,13 +2,12 @@
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
+#include <userver/formats/json/value.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <userver/utils/assert.hpp>
-#include <userver/formats/json/value.hpp>
 #include <userver/storages/postgres/io/json_types.hpp>
-
+#include <userver/utils/assert.hpp>
 
 namespace just_post {
 
@@ -19,7 +18,7 @@ class GetLastNPostId final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-get-last-n-post_id";
 
   GetLastNPostId(const userver::components::ComponentConfig& config,
-        const userver::components::ComponentContext& component_context)
+                 const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -36,8 +35,7 @@ class GetLastNPostId final : public userver::server::handlers::HttpHandlerBase {
 
       if (n <= 0) {
         throw userver::server::handlers::ClientError(
-        userver::server::handlers::ExternalBody{
-            "Incorrect params\n"});
+            userver::server::handlers::ExternalBody{"Incorrect params\n"});
       }
 
       auto result = pg_cluster_->Execute(
@@ -53,11 +51,11 @@ class GetLastNPostId final : public userver::server::handlers::HttpHandlerBase {
         std::string json_posts_id = "[";
 
         for (auto i = posts_id.begin(); i < posts_id.end(); i++) {
-            if (i != posts_id.begin()) {
-                json_posts_id += " ,";
-            }
+          json_posts_id += std::to_string(*i);
 
-            json_posts_id += std::to_string(*i);
+          if (i != posts_id.end() - 1) {
+            json_posts_id += ", ";
+          }
         }
 
         json_posts_id += "]";
@@ -67,8 +65,7 @@ class GetLastNPostId final : public userver::server::handlers::HttpHandlerBase {
     }
 
     throw userver::server::handlers::ClientError(
-        userver::server::handlers::ExternalBody{
-            "Incorrect params\n"});
+        userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;

@@ -1,8 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 #include <userver/components/component_list.hpp>
 
