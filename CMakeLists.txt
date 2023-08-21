@@ -31,6 +31,9 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
     src/tools/verify_parameter.cpp
     src/tools/verify_parameter.hpp
+
+    src/posts/delete_post.cpp
+    src/posts/delete_post.hpp
 )
 
 

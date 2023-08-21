@@ -67,6 +67,11 @@ components_manager:
             path: /v1/post/create
             method: POST
             task_processor: main-task-processor
+        
+        handler-delete-post:
+            path: /v1/post/delete
+            method: DELETE
+            task_processor: main-task-processor
 
         handler-hello:
             path: /v1/hello
