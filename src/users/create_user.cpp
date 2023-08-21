@@ -1,4 +1,5 @@
 #include "create_user.hpp"
+#include "../tools/verify_parameter.hpp"
 
 #include <fmt/format.h>
 #include <regex>
@@ -12,12 +13,7 @@
 #include <userver/utils/assert.hpp>
 
 namespace just_post {
-static constexpr int MIN_SIZE_OF_PSWD = 8;
-
 namespace {
-
-bool IsValidEmail(const std::string& s);
-bool IsValidPasswd(const std::string& s);
 
 class CreateUser final : public userver::server::handlers::HttpHandlerBase {
  public:
@@ -36,12 +32,12 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
       userver::server::request::RequestContext&) const override {
     const auto& email = request.GetArg("email");
     const auto& passwd = request.GetArg("passwd");
-    if (!IsValidEmail(email)) {
+    if (!tools::IsValidEmail(email)) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{"Email is invalid\n"});
     }
 
-    if (!IsValidPasswd(passwd)) {
+    if (!tools::IsValidPasswd(passwd)) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
               "Password must contain at least 8 symbols\n"});
@@ -79,19 +75,6 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
 
   userver::storages::postgres::ClusterPtr pg_cluster_;
 };
-
-bool IsValidEmail(const std::string& s) {
-  if (s.empty()) {
-    return false;
-  }
-
-  const std::regex pattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
-  return std::regex_match(s, pattern);
-}
-
-bool IsValidPasswd(const std::string& s) {
-  return s.size() >= MIN_SIZE_OF_PSWD;
-}
 
 }  // namespace
 
