@@ -1,5 +1,7 @@
 #include "get_id.hpp"
 
+#include "../tools/verify_parameter.hpp"
+
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
@@ -27,7 +29,7 @@ class GetId final : public userver::server::handlers::HttpHandlerBase {
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     const auto& email = request.GetArg("email");
-    if (email.size()) {
+    if (IsValidEmail(email)) {
       auto result = pg_cluster_->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
           "SELECT user_id "
