@@ -1,8 +1,6 @@
 #include "create_post.hpp"
 
 #include <fmt/format.h>
-#include <ctime>
-#include <iostream>
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
@@ -55,21 +53,12 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
               "User with this ID doesn't exist\n"});
     }
 
-    std::time_t t = std::time(nullptr);
-    std::tm* now = std::localtime(&t);
-
-    int day = now->tm_mday;
-    int month = now->tm_mon + shift_for_month;
-    int year = now->tm_year + shift_for_year;
-
-    userver::storages::postgres::Date date_of_post(year, month, day);
-
     result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
         "INSERT INTO just_post_schema.posts(user_id, post_body, date_of_post) "
-        "VALUES ($1, $2, $3) "
+        "VALUES ($1, $2, CURRENT_TIMESTAMP) "
         "ON CONFLICT DO NOTHING",
-        user_id_int, msg, date_of_post);
+        user_id_int, msg);
     if (result.RowsAffected()) {
       request.SetResponseStatus(
           userver::server::http::HttpStatus::kCreated);  // 201
