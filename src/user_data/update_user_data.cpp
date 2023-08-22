@@ -30,12 +30,13 @@ class UpdateUserData final : public userver::server::handlers::HttpHandlerBase {
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     const auto& user_id = request.GetArg("user_id");
-    if (user_id.empty()) {
+
+    int user_id_int = strtol(user_id.c_str(), NULL, 10);
+
+    if (user_id.empty() || !tools::IsValidId(user_id_int)) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
-
-    int user_id_int = strtol(user_id.c_str(), NULL, 10);
 
     auto old_result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
@@ -69,7 +70,7 @@ class UpdateUserData final : public userver::server::handlers::HttpHandlerBase {
       params.age = strtol(age.c_str(), NULL, 10);
     }
 
-    if (IsValidGender(gender)) {
+    if (tools::IsValidGender(gender)) {
       params.gender = gender;
     }
 

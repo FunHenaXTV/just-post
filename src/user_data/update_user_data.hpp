@@ -18,12 +18,6 @@ struct User {
   std::string status;
 };
 
-// struct Test{
-//     std::string test1;
-//     std::string test2;
-//     int test3;
-// };
-
 void AppendUpdateUserData(userver::components::ComponentList& component_list);
 
 }  // namespace just_post
