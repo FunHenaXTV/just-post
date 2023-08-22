@@ -1,4 +1,5 @@
 #include "create_post.hpp"
+#include "../tools/verify_parameter.hpp"
 
 #include <fmt/format.h>
 
@@ -33,12 +34,12 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
     const auto& user_id = request.GetArg("user_id");
     const auto& msg = request.RequestBody();
 
-    if (user_id.empty()) {
+    int user_id_int = strtol(user_id.c_str(), NULL, 10);
+
+    if (user_id.empty() || !tools::IsValidId(user_id_int)) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{"Incorrect Parametrs\n"});
     }
-
-    int user_id_int = strtol(user_id.c_str(), NULL, 10);
 
     auto result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,

@@ -97,6 +97,11 @@ components_manager:
             path: /v1/user_data/add
             method: POST
             task_processor: main-task-processor
+
+        handler-user_data-update:
+            path: /v1/user_data/update
+            method: POST
+            task_processor: main-task-processor
         
         handler-change-passwd:
             path: /v1/user/change_passwd
@@ -105,6 +110,11 @@ components_manager:
         
         handler-get-last-n-post_id:
             path: /v1/post/get_last_n_post_id
+            method: GET
+            task_processor: main-task-processor
+
+        handler-get-post-info:
+            path: /v1/post/get_post_info
             method: GET
             task_processor: main-task-processor
 

@@ -23,11 +23,15 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
     src/user_data/add_user_data.hpp
     src/user_data/add_user_data.cpp
+    src/user_data/update_user_data.hpp
+    src/user_data/update_user_data.cpp
     
     src/posts/create_post.hpp
     src/posts/create_post.cpp
     src/posts/get_last_n_post_id.cpp
     src/posts/get_last_n_post_id.hpp
+    src/posts/get_post_info.cpp
+    src/posts/get_post_info.hpp
 
     src/tools/verify_parameter.cpp
     src/tools/verify_parameter.hpp
