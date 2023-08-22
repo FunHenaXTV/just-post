@@ -1,7 +1,5 @@
 #include "change_passwd.hpp"
 
-#include <fmt/format.h>
-
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/crypto/hash.hpp>
@@ -11,7 +9,6 @@
 #include <userver/utils/assert.hpp>
 
 namespace just_post {
-static constexpr int MIN_SIZE_OF_PSWD = 8;
 
 namespace {
 
@@ -61,7 +58,7 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
     } else {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
-              "This user havent registered yet\n"});
+              "This user has not registered yet\n"});
     }
 
     auto hash_new_passwd = userver::crypto::hash::Sha512(new_passwd);

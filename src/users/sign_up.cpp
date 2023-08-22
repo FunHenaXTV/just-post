@@ -1,8 +1,5 @@
-#include "create_user.hpp"
+#include "sign_up.hpp"
 #include "../tools/verify_parameter.hpp"
-
-#include <fmt/format.h>
-#include <regex>
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
@@ -15,12 +12,12 @@
 namespace just_post {
 namespace {
 
-class CreateUser final : public userver::server::handlers::HttpHandlerBase {
+class SignUp final : public userver::server::handlers::HttpHandlerBase {
  public:
-  static constexpr std::string_view kName = "handler-create-user";
+  static constexpr std::string_view kName = "handler-sign-up";
 
-  CreateUser(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& component_context)
+  SignUp(const userver::components::ComponentConfig& config,
+         const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -78,8 +75,8 @@ class CreateUser final : public userver::server::handlers::HttpHandlerBase {
 
 }  // namespace
 
-void AppendCreateUser(userver::components::ComponentList& component_list) {
-  component_list.Append<CreateUser>();
+void AppendSignUp(userver::components::ComponentList& component_list) {
+  component_list.Append<SignUp>();
 }
 
 }  // namespace just_post

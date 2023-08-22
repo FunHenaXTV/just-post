@@ -14,8 +14,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/echo/echo.hpp
     src/echo/echo.cpp
 
-    src/users/create_user.hpp
-    src/users/create_user.cpp
+    src/users/sign_up.hpp
+    src/users/sign_up.cpp
     src/users/get_id.hpp
     src/users/get_id.cpp
     src/users/change_passwd.cpp

@@ -35,7 +35,7 @@ class GetLastNPostId final : public userver::server::handlers::HttpHandlerBase {
 
       if (n <= 0) {
         throw userver::server::handlers::ClientError(
-            userver::server::handlers::ExternalBody{"Incorrect params\n"});
+            userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
       }
 
       auto result = pg_cluster_->Execute(
