@@ -1,6 +1,5 @@
 #include "add_user_data.hpp"
 
-#include <fmt/format.h>
 #include <iostream>
 
 #include <userver/clients/dns/component.hpp>

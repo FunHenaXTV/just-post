@@ -1,8 +1,6 @@
 #include "create_post.hpp"
 #include "../tools/verify_parameter.hpp"
 
-#include <fmt/format.h>
-
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/crypto/hash.hpp>
