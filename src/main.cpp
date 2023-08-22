@@ -19,6 +19,7 @@
 #include "posts/get_last_n_post_id.hpp"
 
 #include "user_data/add_user_data.hpp"
+#include "user_data/update_user_data.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =
@@ -35,6 +36,7 @@ int main(int argc, char* argv[]) {
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);
   just_post::AppendAddUserData(component_list);
+  just_post::AppendUpdateUserData(component_list);
   just_post::AppendChangePasswd(component_list);
   just_post::AppendCreatePost(component_list);
   just_post::AppendGetLastNPostId(component_list);

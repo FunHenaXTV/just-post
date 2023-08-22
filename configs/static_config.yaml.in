@@ -97,6 +97,11 @@ components_manager:
             path: /v1/user_data/add
             method: POST
             task_processor: main-task-processor
+
+        handler-user_data-update:
+            path: /v1/user_data/update
+            method: POST
+            task_processor: main-task-processor
         
         handler-change-passwd:
             path: /v1/user/change_passwd
