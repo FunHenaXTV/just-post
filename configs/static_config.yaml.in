@@ -113,8 +113,8 @@ components_manager:
             method: GET
             task_processor: main-task-processor
 
-        handler-get-all-post-info:
-            path: /v1/post/get_all_post_info
+        handler-get-post-info:
+            path: /v1/post/get_post_info
             method: GET
             task_processor: main-task-processor
 

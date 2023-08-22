@@ -16,8 +16,8 @@
 
 #include "posts/create_post.hpp"
 #include "posts/delete_post.hpp"
+#include "posts/get_post_info.hpp"
 #include "posts/get_last_n_post_id.hpp"
-#include "posts/get_all_post_info.hpp"
 
 #include "user_data/add_user_data.hpp"
 #include "user_data/update_user_data.hpp"
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
   just_post::AppendCreatePost(component_list);
   just_post::AppendGetLastNPostId(component_list);
   just_post::AppendDeletePost(component_list);
-  just_post::AppendGetAllPostInfo(component_list);
+  just_post::AppendGetPostInfo(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
