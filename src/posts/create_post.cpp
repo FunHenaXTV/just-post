@@ -36,7 +36,7 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
 
     if (user_id.empty() || !tools::IsValidId(user_id_int)) {
       throw userver::server::handlers::ClientError(
-          userver::server::handlers::ExternalBody{"Incorrect Parametrs\n"});
+          userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
 
     auto result = pg_cluster_->Execute(
@@ -49,7 +49,7 @@ class CreatePost final : public userver::server::handlers::HttpHandlerBase {
     if (result.Size() != 1) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{
-              "User with this ID doesn't exist\n"});
+              "User with this ID does not exist\n"});
     }
 
     result = pg_cluster_->Execute(

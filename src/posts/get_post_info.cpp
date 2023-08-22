@@ -36,7 +36,7 @@ class GetPostInfo final : public userver::server::handlers::HttpHandlerBase {
 
       if (int_post_id <= 0) {
         throw userver::server::handlers::ClientError(
-            userver::server::handlers::ExternalBody{"Incorrect params\n"});
+            userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
       }
 
       auto result = pg_cluster_->Execute(
@@ -51,7 +51,7 @@ class GetPostInfo final : public userver::server::handlers::HttpHandlerBase {
       if (!result.Size()) {
         throw userver::server::handlers::ClientError(
             userver::server::handlers::ExternalBody{
-                "This post doesnt exist\n"});
+                "This post does not exist\n"});
       }
 
       auto iteration = result.AsSetOf<just_post::MyRowType>(
