@@ -38,6 +38,15 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
     src/posts/delete_post.cpp
     src/posts/delete_post.hpp
+
+    src/comments/create_comment.cpp
+    src/comments/create_comment.hpp
+    src/comments/delete_comment.cpp
+    src/comments/delete_comment.hpp
+    src/comments/get_comment_info.cpp
+    src/comments/get_comment_info.hpp
+    src/comments/get_n_comments.cpp
+    src/comments/get_n_comments.hpp
 )
 
 
