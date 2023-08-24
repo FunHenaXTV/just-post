@@ -19,7 +19,7 @@ class CreateComment final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-create-comment";
 
   CreateComment(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& component_context)
+                const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -36,7 +36,8 @@ class CreateComment final : public userver::server::handlers::HttpHandlerBase {
     int user_id_int = strtol(user_id.c_str(), NULL, 10);
     int post_id_int = strtol(post_id.c_str(), NULL, 10);
 
-    if (user_id.empty() || !tools::IsValidId(user_id_int) || post_id.empty() || !tools::IsValidId(post_id_int)) {
+    if (user_id.empty() || !tools::IsValidId(user_id_int) || post_id.empty() ||
+        !tools::IsValidId(post_id_int)) {
       throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
@@ -69,7 +70,8 @@ class CreateComment final : public userver::server::handlers::HttpHandlerBase {
 
     result = pg_cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        "INSERT INTO just_post_schema.comments(post_id, user_id, comment_body, date_of_comment) "
+        "INSERT INTO just_post_schema.comments(post_id, user_id, comment_body, "
+        "date_of_comment) "
         "VALUES ($1, $2, $3, CURRENT_TIMESTAMP) "
         "ON CONFLICT DO NOTHING",
         post_id_int, user_id_int, msg);

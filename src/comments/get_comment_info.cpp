@@ -33,39 +33,39 @@ class GetCommentInfo final : public userver::server::handlers::HttpHandlerBase {
 
     if (!comment_id.size()) {
       throw userver::server::handlers::ClientError(
-        userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
+          userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
 
     int int_comment_id = strtol(comment_id.c_str(), NULL, 10);
 
     if (!tools::IsValidId(int_comment_id)) {
       throw userver::server::handlers::ClientError(
-        userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
+          userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
 
     auto result = pg_cluster_->Execute(
-      userver::storages::postgres::ClusterHostType::kMaster,
-      "SELECT just_post_schema.users.email, comment_body, "    
-      "to_char(date_of_comment, 'YYYY-MM-DD HH24:MI:SS+03:00')"
-      "FROM just_post_schema.comments "
-      "JOIN just_post_schema.users USING(user_id)"
-      "WHERE comment_id = $1 ",
-      int_comment_id);
+        userver::storages::postgres::ClusterHostType::kMaster,
+        "SELECT just_post_schema.users.email, comment_body, "
+        "to_char(date_of_comment, 'YYYY-MM-DD HH24:MI:SS+03:00')"
+        "FROM just_post_schema.comments "
+        "JOIN just_post_schema.users USING(user_id)"
+        "WHERE comment_id = $1 ",
+        int_comment_id);
 
-      //нужен ли post_id ????
+    //нужен ли post_id ????
 
     if (!result.Size()) {
       throw userver::server::handlers::ClientError(
-        userver::server::handlers::ExternalBody{
-        "This comment does not exist\n"});
+          userver::server::handlers::ExternalBody{
+              "This comment does not exist\n"});
     }
 
     auto iteration = result.AsSetOf<just_post::RowTypeComments>(
-      userver::storages::postgres::kRowTag);
+        userver::storages::postgres::kRowTag);
 
     auto row = *(iteration.begin());
     static_assert(std::is_same_v<decltype(row), just_post::RowTypeComments>,
-      "Iterate over aggregate classes");
+                  "Iterate over aggregate classes");
 
     std::string json_comment_info = "{";
     json_comment_info += "\"email\":";
@@ -73,9 +73,9 @@ class GetCommentInfo final : public userver::server::handlers::HttpHandlerBase {
     json_comment_info += ", \"comment_body\":";
     json_comment_info += "\"" + row.comment_body + "\"";
     json_comment_info += ", \"date_of_comment\":";
-    json_comment_info += "\"" + row.date_of_comment.substr(0, 10) + "T" +
-      row.date_of_comment.substr(11, row.date_of_comment.size()) +
-        "\"";
+    json_comment_info +=
+        "\"" + row.date_of_comment.substr(0, 10) + "T" +
+        row.date_of_comment.substr(11, row.date_of_comment.size()) + "\"";
     json_comment_info += "}";
 
     return json_comment_info;

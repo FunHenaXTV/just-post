@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
   just_post::AppendDeleteComment(component_list);
   just_post::AppendGetCommentInfo(component_list);
   just_post::AppendGetNComments(component_list);
-  
+
   // Legacy components
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);

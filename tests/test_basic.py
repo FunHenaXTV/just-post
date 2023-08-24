@@ -28,6 +28,7 @@ async def test_db_updates(service_client):
     assert response.status == 200
     assert response.text == 'Hi again, World!\n'
 
+
 async def test_general(service_client):
     response = await service_client.post('/v1/user/sign_up', params={
         'email': 'dz2003@bk.ru',
@@ -54,13 +55,12 @@ async def test_general(service_client):
         'age': '19',
         'city': 'Moscow'
     })
-    
+
     assert response.status == 201
     assert response.text == 'ok\n'
 
-    response = await service_client.post('/v1/post/create', data='abboba', params={
-        'user_id': '1',
-    })
+    response = await service_client.post('/v1/post/create', data='abboba',
+                                         params={'user_id': '1'})
 
     assert response.status == 201
     assert response.text == 'ok\n'
@@ -71,8 +71,7 @@ async def test_general(service_client):
         'new_passwd': 'asdfghjkl'
     })
 
-    # Should be 200
-    assert response.status == 201
+    assert response.status == 200
     assert response.text == 'ok\n'
 
     response = await service_client.get('/v1/user/sign_in', params={
@@ -82,6 +81,7 @@ async def test_general(service_client):
 
     assert response.status == 200
     assert response.text == '1'
+
 
 @pytest.mark.pgsql('db_1', files=['initial_data.sql'])
 async def test_db_initial_data(service_client):

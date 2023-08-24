@@ -84,7 +84,7 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
 
     if (result.RowsAffected()) {
       request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
-      return "Ok\n";
+      return "ok\n";
     }
 
     throw userver::server::handlers::InternalServerError(

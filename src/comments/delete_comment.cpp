@@ -17,7 +17,7 @@ class DeleteComment final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-delete-comment";
 
   DeleteComment(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& component_context)
+                const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context

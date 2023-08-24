@@ -19,21 +19,21 @@ class GetNComments final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-get-n-comments";
 
   GetNComments(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
+               const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
                 .FindComponent<userver::components::Postgres>("postgres-db-1")
                 .GetCluster()) {}
 
-    std::string HandleRequestThrow(
+  std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     const auto& post_id = request.GetArg("post_id");
     const auto& cnt = request.GetArg("n");
 
     if (!cnt.size() || !post_id.size()) {
-        throw userver::server::handlers::ClientError(
+      throw userver::server::handlers::ClientError(
           userver::server::handlers::ExternalBody{"Incorrect parameters\n"});
     }
 
@@ -46,17 +46,17 @@ class GetNComments final : public userver::server::handlers::HttpHandlerBase {
     }
 
     auto result = pg_cluster_->Execute(
-      userver::storages::postgres::ClusterHostType::kMaster,
-      "SELECT comment_id "
-      "FROM just_post_schema.comments "
-      "WHERE post_id = $2"
-      "ORDER BY date_of_comment DESC "
-      "LIMIT $1",
-      n, int_post_id);
+        userver::storages::postgres::ClusterHostType::kMaster,
+        "SELECT comment_id "
+        "FROM just_post_schema.comments "
+        "WHERE post_id = $2"
+        "ORDER BY date_of_comment DESC "
+        "LIMIT $1",
+        n, int_post_id);
 
     if (result.Size()) {
       auto comments_id = result.AsContainer<std::vector<int>>();
-      std::string json_comments_id= "[";
+      std::string json_comments_id = "[";
 
       for (auto i = comments_id.begin(); i < comments_id.end(); i++) {
         json_comments_id += std::to_string(*i);
@@ -71,7 +71,8 @@ class GetNComments final : public userver::server::handlers::HttpHandlerBase {
       return json_comments_id;
     } else {
       throw userver::server::handlers::ClientError(
-          userver::server::handlers::ExternalBody{"This post does not exist or have not any comments\n"});
+          userver::server::handlers::ExternalBody{
+              "This post does not exist or have not any comments\n"});
     }
   }
 
