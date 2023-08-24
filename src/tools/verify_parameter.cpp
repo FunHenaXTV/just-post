@@ -26,4 +26,8 @@ bool IsValidGender(const std::string& s) {
   return s == "male" || s == "female";
 }
 
+bool IsValidStatus(const std::string& s) {
+  return s == "offline" || s == "online";
+}
+
 }  // namespace tools

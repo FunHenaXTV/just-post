@@ -63,6 +63,11 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-sign-in:
+            path: /v1/user/sign_in
+            method: GET
+            task_processor: main-task-processor
+
         handler-create-post:
             path: /v1/post/create
             method: POST
