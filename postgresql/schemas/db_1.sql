@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS just_post_schema.user_data (
     user_name text DEFAULT 'Unknown',
     surname text DEFAULT 'Unknown',
     age int DEFAULT 0,
-    gender varchar(20) DEFAULT 'Unknown',
+    gender varchar(10) DEFAULT 'Unknown',
     city text DEFAULT 'Unknown',
     date_of_birth date,
-    user_status text DEFAULT 'offline',
+    user_status varchar(10) DEFAULT 'offline',
     CONSTRAINT CHK_user_status CHECK (user_status = 'offline' OR user_status = 'online'),
     CONSTRAINT CHK_user_gender CHECK (gender = 'male' OR gender = 'female' OR gender = 'Unknown'),
     CONSTRAINT CHK_user_age CHECK (age >= 0)
