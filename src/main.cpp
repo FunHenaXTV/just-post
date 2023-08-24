@@ -23,6 +23,11 @@
 #include "user_data/add_user_data.hpp"
 #include "user_data/update_user_data.hpp"
 
+#include "comments/create_comment.hpp"
+#include "comments/delete_comment.hpp"
+#include "comments/get_comment_info.hpp"
+#include "comments/get_n_comments.hpp"
+
 int main(int argc, char* argv[]) {
   auto component_list =
       userver::components::MinimalServerComponentList()
@@ -49,6 +54,12 @@ int main(int argc, char* argv[]) {
   just_post::AppendGetPostInfo(component_list);
   just_post::AppendCreatePost(component_list);
 
+  // Post commets components
+  just_post::AppendCreateComment(component_list);
+  just_post::AppendDeleteComment(component_list);
+  just_post::AppendGetCommentInfo(component_list);
+  just_post::AppendGetNComments(component_list);
+  
   // Legacy components
   just_post::AppendHello(component_list);
   just_post::AppendEcho(component_list);
