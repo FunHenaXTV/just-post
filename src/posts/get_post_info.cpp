@@ -19,7 +19,7 @@ class GetPostInfo final : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-get-post-info";
 
   GetPostInfo(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
+              const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
