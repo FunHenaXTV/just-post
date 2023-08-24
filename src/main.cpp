@@ -12,6 +12,7 @@
 
 #include "users/change_passwd.hpp"
 #include "users/get_id.hpp"
+#include "users/sign_in.hpp"
 #include "users/sign_up.hpp"
 
 #include "posts/create_post.hpp"
@@ -32,17 +33,25 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::clients::dns::Component>();
 
+  // User components
   just_post::AppendSignUp(component_list);
+  just_post::AppendSignIn(component_list);
   just_post::AppendGetId(component_list);
-  just_post::AppendHello(component_list);
-  just_post::AppendEcho(component_list);
+  just_post::AppendChangePasswd(component_list);
+
+  // User_data components
   just_post::AppendAddUserData(component_list);
   just_post::AppendUpdateUserData(component_list);
-  just_post::AppendChangePasswd(component_list);
-  just_post::AppendCreatePost(component_list);
+
+  // Post components
   just_post::AppendGetLastNPostId(component_list);
   just_post::AppendDeletePost(component_list);
   just_post::AppendGetPostInfo(component_list);
+  just_post::AppendCreatePost(component_list);
+
+  // Legacy components
+  just_post::AppendHello(component_list);
+  just_post::AppendEcho(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
