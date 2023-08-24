@@ -83,11 +83,12 @@ class ChangePasswd final : public userver::server::handlers::HttpHandlerBase {
         user_id_int, hash_new_passwd);
 
     if (result.RowsAffected()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kCreated);
+      request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
       return "ok\n";
     }
 
-    return "Server Error\n";
+    throw userver::server::handlers::InternalServerError(
+        userver::server::handlers::ExternalBody{"Server Error\n"});
   }
 
   userver::storages::postgres::ClusterPtr pg_cluster_;

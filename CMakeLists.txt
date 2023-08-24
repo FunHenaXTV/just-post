@@ -20,6 +20,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/users/get_id.cpp
     src/users/change_passwd.cpp
     src/users/change_passwd.hpp
+    src/users/sign_in.cpp
+    src/users/sign_in.hpp
 
     src/user_data/add_user_data.hpp
     src/user_data/add_user_data.cpp
@@ -38,6 +40,15 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
     src/posts/delete_post.cpp
     src/posts/delete_post.hpp
+
+    src/comments/create_comment.cpp
+    src/comments/create_comment.hpp
+    src/comments/delete_comment.cpp
+    src/comments/delete_comment.hpp
+    src/comments/get_comment_info.cpp
+    src/comments/get_comment_info.hpp
+    src/comments/get_n_comments.cpp
+    src/comments/get_n_comments.hpp
 )
 
 

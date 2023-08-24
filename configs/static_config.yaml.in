@@ -63,6 +63,11 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-sign-in:
+            path: /v1/user/sign_in
+            method: GET
+            task_processor: main-task-processor
+
         handler-create-post:
             path: /v1/post/create
             method: POST
@@ -113,6 +118,26 @@ components_manager:
             method: GET
             task_processor: main-task-processor
 
+        handler-create-comment:
+            path: /v1/comment/create_comment
+            method: POST
+            task_processor: main-task-processor
+        
+        handler-delete-comment:
+            path: /v1/comment/delete
+            method: DELETE
+            task_processor: main-task-processor
+
+        handler-get-comment-info:
+            path: /v1/comment/get_comment_info
+            method: GET
+            task_processor: main-task-processor
+
+        handler-get-n-comments:
+            path:  /v1/comment/get_n_comments
+            method: GET
+            task_processor: main-task-processor
+        
         postgres-db-1:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor
