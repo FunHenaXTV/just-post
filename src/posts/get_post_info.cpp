@@ -31,6 +31,13 @@ class GetPostInfo final : public userver::server::handlers::HttpHandlerBase {
       userver::server::request::RequestContext&) const override {
     const auto& post_id = request.GetArg("post_id");
 
+    auto &response = request.GetHttpResponse();
+    const std::string allow_origin_header = "Access-Control-Allow-Origin";
+    const std::string allow_headers_header = "Access-Control-Allow-Headers";
+    
+    response.SetHeader(allow_origin_header, "*");
+    response.SetHeader(allow_headers_header, "*");
+
     if (post_id.size()) {
       int int_post_id = strtol(post_id.c_str(), NULL, 10);
 
