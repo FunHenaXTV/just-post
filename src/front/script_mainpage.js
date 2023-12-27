@@ -163,9 +163,16 @@ let isLoading = false
 // отправлять никаких запросов:
 let shouldLoad = true
 
-
 function publishPost() {
-  var postContent = document.getElementById('postInput').value;
-  appendPost(postContent);
-  var xhr = new XMLHttpRequest();
+  var text = document.getElementById('postInput').value;
+  if (text.trim() !== '') {
+    var post = document.createElement('div');
+    post.className = 'post';
+    post.innerHTML = '<h2>' + text + '</h2><footer><button type="button">❤️</button><button type="button">🔄</button></footer>';
+
+    var newsFeed = document.querySelector('.news-feed');
+    newsFeed.insertBefore(post, newsFeed.firstChild);
+
+    document.getElementById('postInput').value = '';
+  }
 }

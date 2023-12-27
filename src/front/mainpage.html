@@ -9,33 +9,31 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style_mainpage.css">
-	<title>Новостная лента</title>
-  </head>
+ <title>Just-Post</title> 
+  </head> 
   <body>
-    <div class="news-feed">
-      <h1>Just-Post</h1>
-          <!--  Тег template используется, чтобы хранить куски кода,
-          которые не должен видеть пользователь. -->
-    <template id="post_template">
-      <!--  Внутри повторяем разметку свита,
-            удаляя все тексты и числа.
-            Оставляем только «скелет» компонента. -->
-      <article class="post">
-        <h2></h2>
-        <p></p>
-        <footer>
-          <button type="button">❤️ </button>
-          <button type="button">🔄 </button>
-        </footer>
-      </article>
-    </template>
-      <div class="new-post">
-        <textarea class="postInput" rows="4" cols="50" placeholder="Напишите пост..."></textarea>
+    <h1>Just-Post</h1> 
+      <div class="new-post"> 
+        <textarea class="postInput" id="postInput" rows="4" cols="50" placeholder="Напишите пост..."></textarea>
         <br>
-        <a href="#" class="button" onclick="publishPost()"><bold>Опубликовать</bold></a>
-      </div>
-    </div>
-    <script src="script_mainpage.js"></script>
-  </body>
-</body>
+        <a href="#" class="button" onclick="publishPost()"><bold>Опубликовать</bold></a> 
+      </div> 
+    <div class="news-feed">
+    </div> 
+    <script>
+      function publishPost() {
+        var text = document.getElementById('postInput').value;
+        if (text.trim() !== '') {
+          var post = document.createElement('div');
+          post.className = 'post';
+          post.innerHTML = '<h2>' + text + '</h2><footer><button type="button">❤️</button><button type="button">🔄</button></footer>';
+          
+          var newsFeed = document.querySelector('.news-feed');
+          newsFeed.insertBefore(post, newsFeed.firstChild);
+          
+          document.getElementById('postInput').value = '';
+        }
+      }
+    </script>
+  </body> 
 </html>
