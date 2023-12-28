@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style_settings.css"> 
+  <title>ваш профиль</title>
+</head>
+<body>
+  <div class="back-link">
+    <a href="#" onclick="goBack()">Назад</a>
+  </div>
+  <div class="profile-card">
+    <h2>Настройки пользователя</h2>
+    <div class="user-info">
+      <label for="name">Имя:</label>
+      <input type="text" id="name" name="name" placeholder="Введите ваше имя">
+
+      <label for="gender">Пол:</label>
+      <select id="gender" name="gender">
+        <option value="male">Мужской</option>
+        <option value="female">Женский</option>
+        <option value="other">геи</option>
+      </select>
+
+      <label for="city">Город:</label>
+      <input type="text" id="city" name="city" placeholder="Введите ваш город">
+
+      <label for="age">Возраст:</label>
+      <input type="number" id="age" name="age" placeholder="Введите ваш возраст">
+
+      <button onclick="saveChanges()">Сохранить</button>
+    </div>
+  </div>
+  
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+
+    function saveChanges() {
+      var name = document.getElementById('name').value;
+      var gender = document.getElementById('gender').value;
+      var city = document.getElementById('city').value;
+      var age = document.getElementById('age').value;
+
+      // Здесь ваша логика для сохранения изменений, например, отправка на сервер или сохранение в локальное хранилище
+      // Пример:
+      // fetch('/save-profile', {
+      //   method: 'POST',
+      //   body: JSON.stringify({ name, gender, city, age }),
+      //   headers: {
+      //     'Content-type': 'application/json; charset=UTF-8'
+      //   }
+      // })
+      // .then(response => response.json())
+      // .then(data => {
+      //   // обработка ответа, например, показ сообщения об успешном сохранении
+      //   alert('Changes saved successfully!');
+      // })
+    }
+  </script>
+</body>
+</html>
