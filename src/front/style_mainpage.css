@@ -63,6 +63,11 @@ body {
     border-radius: 5px;
 }
 
+.comments-section {
+	padding-left: 20px;
+	font-size: 15px;
+}
+
 h1 {
 	padding-top: 30px;
     text-align: center;
@@ -94,6 +99,10 @@ footer {
     margin-top: 10px;
 	text-align: right;
 	padding-right: 30px;
+}
+
+.comment-input {
+	width: 50px;
 }
 
 .button {

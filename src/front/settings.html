@@ -4,33 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style_settings.css"> 
-  <title>ваш профиль</title>
+  <link href="style_settings.css" rel="stylesheet">
+  <title>User Profile</title>
 </head>
 <body>
   <div class="back-link">
     <a href="#" onclick="goBack()">Назад</a>
   </div>
   <div class="profile-card">
-    <h2>Настройки пользователя</h2>
+    <h2>Информация о профиле</h2>
     <div class="user-info">
-      <label for="name">Имя:</label>
-      <input type="text" id="name" name="name" placeholder="Введите ваше имя">
+      <label for="name">Ваше имя:</label>
+      <input type="text" id="name" name="Имя" placeholder="Имя" disabled>
+
+      <label for="age">Ваш возраст:</label>
+      <input type="number" id="age" name="age" placeholder="Возраст" disabled>
 
       <label for="gender">Пол:</label>
-      <select id="gender" name="gender">
+      <select id="gender" name="gender" disabled>
         <option value="male">Мужской</option>
         <option value="female">Женский</option>
-        <option value="other">геи</option>
+        <option value="other">Нет</option>
       </select>
 
       <label for="city">Город:</label>
-      <input type="text" id="city" name="city" placeholder="Введите ваш город">
+      <input type="text" id="city" name="city" placeholder="Город" disabled>
 
-      <label for="age">Возраст:</label>
-      <input type="number" id="age" name="age" placeholder="Введите ваш возраст">
+      <label for="dob">Дата рождения:</label>
+      <input type="date" id="dob" name="dob" value="1990-01-01" disabled>
 
-      <button onclick="saveChanges()">Сохранить</button>
+      <button class="edit" onclick="enableEdit()">Изменить</button>
+      <button class="save" onclick="saveChanges()" disabled>Сохранить</button>
     </div>
   </div>
   
@@ -39,26 +43,20 @@
       window.history.back();
     }
 
-    function saveChanges() {
-      var name = document.getElementById('name').value;
-      var gender = document.getElementById('gender').value;
-      var city = document.getElementById('city').value;
-      var age = document.getElementById('age').value;
+    function enableEdit() {
+      var inputs = document.querySelectorAll('.user-info input, .user-info select');
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].removeAttribute('disabled');
+      }
+      document.querySelector('.save').removeAttribute('disabled');
+    }
 
-      // Здесь ваша логика для сохранения изменений, например, отправка на сервер или сохранение в локальное хранилище
-      // Пример:
-      // fetch('/save-profile', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ name, gender, city, age }),
-      //   headers: {
-      //     'Content-type': 'application/json; charset=UTF-8'
-      //   }
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //   // обработка ответа, например, показ сообщения об успешном сохранении
-      //   alert('Changes saved successfully!');
-      // })
+    function saveChanges() {
+      var inputs = document.querySelectorAll('.user-info input, .user-info select');
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].setAttribute('disabled', 'disabled');
+      }
+      document.querySelector('.save').setAttribute('disabled', 'disabled');
     }
   </script>
 </body>
